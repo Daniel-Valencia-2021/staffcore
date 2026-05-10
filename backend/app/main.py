@@ -1,9 +1,12 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import engine
-from dotenv import load_dotenv
+from app.database import engine, Base
+from app import models  # esto carga todos los modelos en memoria
 
-load_dotenv()
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="StaffCore API", version="1.0.0")
 
