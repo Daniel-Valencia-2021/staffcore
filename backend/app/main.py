@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app import models  # esto carga todos los modelos en memoria
+from app import routers
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,6 +22,10 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "StaffCore API running"}
+
+app.include_router(routers.department_router)
+app.include_router(routers.employee_router)
+app.include_router(routers.user_router)
 
 @app.get("/test-db")
 def test_db():
