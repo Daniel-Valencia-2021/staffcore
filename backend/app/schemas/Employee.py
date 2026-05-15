@@ -17,6 +17,8 @@ class Employee_Base(BaseModel):
     details: Optional[str] = None
     status: str = 'active'
     img:  Optional[str] = None
+    departament_id: int
+
     
 class Employee_Create(Employee_Base):
     pass
