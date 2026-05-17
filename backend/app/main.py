@@ -26,6 +26,7 @@ def root():
 app.include_router(routers.department_router)
 app.include_router(routers.employee_router)
 app.include_router(routers.user_router)
+app.include_router(routers.auth_router)
 
 @app.get("/test-db")
 def test_db():

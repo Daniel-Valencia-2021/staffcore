@@ -5,6 +5,9 @@ from app.models.employee import Employee
 from app.schemas.Employee import Employee_Response, Employee_Create
 from typing import List
 
+from app.auth.dependencies import get_current_user
+from app.models.user import User
+
 router = APIRouter (prefix='/employee', tags=['Employee'])
 
 
@@ -15,7 +18,7 @@ def get_employee(db: Session = Depends(get_db)):
     return employee
 
 @router.get('/{id}', response_model=Employee_Response)
-def get_employee_by_id(id: int ,db: Session = Depends(get_db)):
+def get_employee_by_id(id: int ,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     employee_id=db.query(Employee).filter(Employee.id_employee == id).first()
     
     if not employee_id:
@@ -25,7 +28,7 @@ def get_employee_by_id(id: int ,db: Session = Depends(get_db)):
 
 
 @router.post('/', response_model=Employee_Response)
-def create_employee(datos: Employee_Create ,db: Session = Depends(get_db)):
+def create_employee(datos: Employee_Create ,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     create = Employee(**datos.model_dump())
 
     db.add(create)
@@ -34,7 +37,7 @@ def create_employee(datos: Employee_Create ,db: Session = Depends(get_db)):
     return create
     
 @router.patch('/{id}', response_model= Employee_Response)
-def edit_employee(id: int, datos:Employee_Create ,db: Session= Depends(get_db)):
+def edit_employee(id: int, datos:Employee_Create ,db: Session= Depends(get_db), current_user: User = Depends(get_current_user)):
     edit_employee = db.query(Employee).filter(Employee.id_employee == id).first()
     
     if not edit_employee:
@@ -49,7 +52,7 @@ def edit_employee(id: int, datos:Employee_Create ,db: Session= Depends(get_db)):
     return edit_employee
 
 @router.delete('/{id}', response_model= Employee_Response)
-def delete_employee(id:int, db: Session = Depends(get_db)):
+def delete_employee(id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     borrar = db.query(Employee).filter(Employee.id_employee == id).first()
     if not borrar:
         raise HTTPException(status_code=404, detail='Empleado no encontrado')

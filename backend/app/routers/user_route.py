@@ -6,18 +6,21 @@ from app.schemas.User import User_Response, User_Create
 from typing import List
 from passlib.context import CryptContext
 
+from app.auth.dependencies import get_current_user
+from app.models.user import User
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter (prefix='/user', tags=['User'])
 
 
 @router.get('/', response_model= List[User_Response])
-def get_user(db: Session = Depends(get_db)):
+def get_user(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user = db.query(User).all()
     return user
 
 @router.get('/{id}', response_model=User_Response)
-def get_User_by_id(id: int, db: Session = Depends(get_db)):
+def get_User_by_id(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     User_id=db.query(User).filter(User.id_user == id).first()
     
     if not User_id:
@@ -27,7 +30,7 @@ def get_User_by_id(id: int, db: Session = Depends(get_db)):
 
 
 @router.post('/', response_model=User_Response)
-def create_user(datos: User_Create, db: Session = Depends(get_db)):
+def create_user(datos: User_Create, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     
     hashed = pwd_context.hash(datos.password)
     create = User(
@@ -44,7 +47,7 @@ def create_user(datos: User_Create, db: Session = Depends(get_db)):
     return create
     
 @router.patch('/{id}', response_model= User_Response)
-def edit_user(id: int, datos: User_Create ,db: Session= Depends(get_db)):
+def edit_user(id: int, datos: User_Create ,db: Session= Depends(get_db), current_user: User = Depends(get_current_user)):
     edit_user = db.query(User).filter(User.id_user == id).first()
     
     if not edit_user:
@@ -61,7 +64,7 @@ def edit_user(id: int, datos: User_Create ,db: Session= Depends(get_db)):
     return edit_user
 
 @router.delete('/{id}', response_model= User_Response)
-def delete_user(id:int, db: Session = Depends(get_db)):
+def delete_user(id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     borrar = db.query(User).filter(User.id_user == id).first()
     if not borrar:
         raise HTTPException(status_code=404, detail='User no encontrado')

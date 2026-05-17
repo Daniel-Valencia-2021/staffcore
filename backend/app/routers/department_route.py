@@ -5,6 +5,9 @@ from app.models.department import Department
 from app.schemas.Department import Department_Response, Deparment_Create
 from typing import List
 
+from app.auth.dependencies import get_current_user
+from app.models.user import User
+
 router = APIRouter (prefix='/departments', tags=['Department'])
 
 @router.get('/', response_model= List[Department_Response])
@@ -14,7 +17,7 @@ def get_departments(db: Session = Depends(get_db)):
     return departments
 
 @router.get('/{id}', response_model=Department_Response)
-def get_department_by_id(id: int, db: Session = Depends(get_db)):
+def get_department_by_id(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     department_id=db.query(Department).filter(Department.id == id).first()
     
     if not department_id:
@@ -24,7 +27,7 @@ def get_department_by_id(id: int, db: Session = Depends(get_db)):
 
 
 @router.post('/', response_model=Department_Response)
-def create_department(datos: Deparment_Create, db: Session = Depends(get_db)):
+def create_department(datos: Deparment_Create, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     create = Department (**datos.model_dump())
 
     db.add(create)
@@ -34,7 +37,7 @@ def create_department(datos: Deparment_Create, db: Session = Depends(get_db)):
 
     
 @router.patch('/{id}', response_model= Department_Response)
-def edit_department(id: int,datos: Deparment_Create , db: Session= Depends(get_db)):
+def edit_department(id: int,datos: Deparment_Create , db: Session= Depends(get_db), current_user: User = Depends(get_current_user)):
     department_id=db.query(Department).filter(Department.id == id).first()
     
     if not department_id:
@@ -47,7 +50,7 @@ def edit_department(id: int,datos: Deparment_Create , db: Session= Depends(get_d
     return department_id
 
 @router.delete('/{id}', response_model= Department_Response)
-def delete_department(id:int, db: Session = Depends(get_db)):
+def delete_department(id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     borrar = db.query(Department).filter(Department.id == id).first()
     
     if not borrar:
