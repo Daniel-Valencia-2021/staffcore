@@ -5,9 +5,14 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
-
+import { NavLink, useNavigate } from "react-router-dom";
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <aside className="group w-14 hover:w-56 transition-all duration-300 h-full bg-[#0a0a0a] flex flex-col items-start py-4 gap-4 px-3">
       <div className="logo w-10 h-10 rounded-sm bg-[#2a5a2a] flex items-center justify-center text-white text-xs font-black tracking-wider">
@@ -64,11 +69,15 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      <button className="text-gray-500 hover:text-white" title="Cerrar sesión">
+      <button
+        onClick={handleLogout}
+        className="text-gray-500 hover:text-white"
+        title="Cerrar sesión"
+      >
         <LogOut size={20} />
         <span className="hidden group-hover:block whitespace-nowrap text-sm">
-            Cerrar sesión
-          </span>
+          Cerrar sesión
+        </span>
       </button>
     </aside>
   );
