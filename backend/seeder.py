@@ -48,7 +48,7 @@ print("Creando empleados...")
 estados = [EmployeeStatus.active, EmployeeStatus.active, EmployeeStatus.active, EmployeeStatus.vacation, EmployeeStatus.inactive]
 cargos = ["Dev Senior", "Dev Junior", "Analista", "Coordinador", "Gerente", "Auxiliar", "Consultor", "Especialista"]
 
-for i in range(15):
+for i in range(30):
     emp = Employee(
         first_name=fake.first_name(),
         last_name=fake.last_name(),

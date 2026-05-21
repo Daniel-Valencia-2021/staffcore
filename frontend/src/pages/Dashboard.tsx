@@ -70,18 +70,12 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Cargando...
-      </div>
-    );
-  }
-  if (loading) {
-    return (
       <div className="flex items-center justify-center h-full">
         <p className="text-gray-400 text-sm">Cargando datos...</p>
       </div>
     );
   }
+
   return (
     <div className="p-8">
       <div className="dashboard mb-12">
