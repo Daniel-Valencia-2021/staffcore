@@ -32,8 +32,8 @@ interface Departamento {
 }
 
 export default function Dashboard() {
-  const [empleados, setEmpleados] = useState<Empleado[]>([]); // Cambia el tipo de estado a un array para almacenar la lista de empleados);
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([]); // Cambia el tipo de estado a un array para almacenar la lista de departamentos);
+  const [empleados, setEmpleados] = useState<Empleado[]>([]);
+  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +41,6 @@ export default function Dashboard() {
       try {
         const empleadosResponse = await api.get("/employee/");
         setEmpleados(empleadosResponse.data);
-
         const departamentosResponse = await api.get("/departments/");
         setDepartamentos(departamentosResponse.data);
       } catch (error) {
@@ -50,19 +49,15 @@ export default function Dashboard() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const totalEmpleados = empleados.length; // Reemplaza con la lógica para obtener el número total de empleados
-
+  const totalEmpleados = empleados.length;
   const salarioPromedio =
     empleados.length > 0
       ? empleados.reduce((acc, emp) => acc + emp.salary, 0) / empleados.length
-      : 0; // Reemplaza con la lógica para calcular el salario promedio
-
-  const empleadosRecientes = empleados.slice(-5).reverse(); // Reemplaza con la lógica para obtener los empleados recientes
-
+      : 0;
+  const empleadosRecientes = empleados.slice(-5).reverse();
   const empleadosPorDepartamento = departamentos.map((dept) => ({
     name: dept.name,
     empleados: empleados.filter((emp) => emp.departament_id === dept.id).length,
@@ -77,79 +72,112 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-8">
-      <div className="dashboard mb-12">
-        <h2 className="text-xs text-gray-400 justify-center uppercase tracking-widest mb-6">
-          RESUMEN GENERAL
-        </h2>
-        <div className="flex gap-12 justify-center border-b border-gray-100 pb-8">
-          <div className="flex flex-col">
-            <span className="text-4xl font-black text-[#2a5a2a]">
-              {totalEmpleados}
-            </span>
-            <span className="text-xs text-gray-400 uppercase tracking-wider mt-1">
-              Empleados
-            </span>
-          </div>
+    <div className="p-8 max-w-[1600px] mx-auto space-y-10">
 
-          <div className="flex flex-col">
-            <span className="text-4xl font-black text-[#2a5a2a]">
-              {departamentos.length}
-            </span>
-            <span className="text-xs text-gray-400 uppercase tracking-wider mt-1">
-              Departamentos
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="text-4xl font-black text-[#2a5a2a]">
-              $
-              {salarioPromedio.toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              })}{" "}
-            </span>
-            <span className="text-xs text-gray-400 uppercase tracking-wider mt-1">
-              Salario promedio
-            </span>
-          </div>
-        </div>
+      {/* Bienvenida */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          Bienvenido
+        </h1>
+        <p className="text-sm text-gray-400 mt-1">
+          Aquí está el resumen de tu organización hoy.
+        </p>
       </div>
 
-      <div className="mb-10">
-        <h2 className="text-xs text-gray-400 justify-center uppercase tracking-widest mb-6">
-          Empleados recientes
-        </h2>
+      {/* Métricas — cards estilo Stitch */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white border border-gray-100 rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+            Total empleados
+          </p>
+          <span className="text-4xl font-black text-gray-900">
+            {totalEmpleados}
+          </span>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-[#2a5a2a] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+        </div>
+
+        <div className="bg-white border border-gray-100 rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+            Departamentos
+          </p>
+          <span className="text-4xl font-black text-gray-900">
+            {departamentos.length}
+          </span>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-[#2a5a2a] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+        </div>
+
+        <div className="bg-white border border-gray-100 rounded-xl p-6 flex flex-col gap-4 relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+            Salario promedio
+          </p>
+          <span className="text-4xl font-black text-gray-900">
+            ${salarioPromedio.toLocaleString("es-CO", { maximumFractionDigits: 0 })}
+          </span>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-[#2a5a2a] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+        </div>
+      </section>
+
+      {/* Tabla empleados recientes */}
+      <section className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+          <h4 className="text-base font-semibold text-gray-900">
+            Empleados recientes
+          </h4>
+          <button className="text-sm text-[#2a5a2a] font-semibold hover:underline">
+            Ver todos
+          </button>
+        </div>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Cargo</TableHead>
-              <TableHead>Departamento</TableHead>
-              <TableHead>Salario</TableHead>
+            <TableRow className="bg-gray-50">
+              <TableHead className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Empleado
+              </TableHead>
+              <TableHead className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Cargo
+              </TableHead>
+              <TableHead className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Departamento
+              </TableHead>
+              <TableHead className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Salario
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {empleadosRecientes.map((emp) => (
-              <TableRow key={emp.id_employee}>
+              <TableRow
+                key={emp.id_employee}
+                className="hover:bg-gray-50 transition-colors cursor-pointer"
+              >
                 <TableCell>
-                  {emp.first_name} {emp.last_name}
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-[10px] font-bold text-[#2a5a2a]">
+                      {emp.first_name[0]}{emp.last_name[0]}
+                    </div>
+                    <span className="font-medium text-gray-900">
+                      {emp.first_name} {emp.last_name}
+                    </span>
+                  </div>
                 </TableCell>
-                <TableCell>{emp.position}</TableCell>
-                <TableCell>
-                  {departamentos.find((d) => d.id === emp.departament_id)
-                    ?.name || "No asignado"}
+                <TableCell className="text-gray-500">{emp.position}</TableCell>
+                <TableCell className="text-gray-500">
+                  {departamentos.find((d) => d.id === emp.departament_id)?.name || "No asignado"}
                 </TableCell>
-                <TableCell>${emp.salary.toLocaleString("es-CO")}</TableCell>
+                <TableCell className="font-medium text-gray-900 tabular-nums">
+                  ${emp.salary.toLocaleString("es-CO")}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </div>
+      </section>
 
-      <div>
-        <h2 className="text-xs text-gray-400 uppercase tracking-widest mb-6">
-          Empleados por departamento
-        </h2>
+      {/* Gráfica por departamento */}
+      <section className="bg-white border border-gray-100 rounded-xl p-6">
+        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-8">
+          Distribución por departamento
+        </h4>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={empleadosPorDepartamento}
@@ -183,7 +211,8 @@ export default function Dashboard() {
             />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </section>
+
     </div>
   );
 }

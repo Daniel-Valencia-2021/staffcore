@@ -21,24 +21,26 @@
 
 ## Vista previa
 
-> 🚧 **Frontend en construcción** — Las capturas de pantalla se agregarán aquí cuando las vistas estén listas.
+> 📸 **Capturas próximamente** — Se agregarán cuando todas las vistas estén completas.
+> Para agregarlas: crea una carpeta `screenshots/` en la raíz del repo y reemplaza esta sección con:
+> `![Dashboard](./screenshots/dashboard.png)`
 
 ```
-[ Dashboard ]   [ Empleados ]   [ Departamentos ]   [ Nómina ]
-     🔲               🔲                🔲               🔲
-  Próximamente     Próximamente      Próximamente    Próximamente
+[ Login ]   [ Dashboard ]   [ Empleados ]   [ Departamentos ]   [ Nómina ]
+   ✅            ✅              ✅                 🔲               🔲
+ Listo         Listo           Listo          Próximamente     Próximamente
 ```
 
 ---
 
 ## ¿Qué es StaffCore?
 
-StaffCore es una plataforma interna de gestión de empleados con un diseño **editorial minimalista** — donde los datos son los protagonistas. Sin ruido visual, sin exceso de elementos. Solo información clara, accesible y bien presentada.
+StaffCore es una plataforma interna de gestión de empleados con un diseño **enterprise moderno** basado en el sistema de diseño Stitch de Google — tipografía Manrope + Inter, paleta de slate profundo con acento verde, cards con tonal layering y tablas sin bordes verticales.
 
-- **148 empleados** gestionados desde un solo lugar
-- **8 departamentos** con métricas en tiempo real
-- **Acceso por roles** — admin y usuario estándar
-- **API REST** completamente documentada con Swagger
+- Empleados gestionados desde un solo lugar
+- Departamentos con métricas en tiempo real
+- Acceso por roles — admin y usuario estándar
+- API REST completamente documentada con Swagger
 
 ---
 
@@ -65,6 +67,7 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **ed
 | **React Router v7** | Navegación entre vistas |
 | **Axios** | Cliente HTTP con interceptor JWT |
 | **Recharts** | Gráficas del dashboard y nómina |
+| **jwt-decode** | Decodificación del token en el cliente |
 
 ---
 
@@ -89,12 +92,13 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **ed
 - [x] Path aliases configurados (`@/*` → `src/*`)
 - [x] shadcn/ui inicializado — Radix + Luma
 - [x] Axios con interceptor JWT
+- [x] React Router con rutas protegidas (`ProtectedRoute`)
 
 **Vistas**
-- [ ] Layout — Sidebar + Header
-- [ ] Login
-- [ ] Dashboard
-- [ ] Empleados
+- [x] Layout — Sidebar con hover expand + Header con métricas reales
+- [x] Login — pantalla dividida, autenticación JWT, redirección automática
+- [x] Dashboard — métricas, tabla de empleados recientes, gráfica de barras por departamento
+- [x] Empleados — CRUD completo, búsqueda en tiempo real, paginación, modal crear/editar
 - [ ] Departamentos
 - [ ] Nómina
 - [ ] Roles & Acceso
@@ -103,31 +107,31 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **ed
 
 ## Diseño
 
-El estilo es **editorial minimalista**. Los números hablan primero.
+El sistema de diseño está basado en **Stitch de Google** — enterprise moderno con tonal layering.
 
 | Elemento | Decisión de diseño |
 |---|---|
-| Sidebar | Solo iconos · 56px de ancho · fondo `#0a0a0a` |
-| Header | Headline con datos reales: *"148 personas. 8 departamentos."* |
-| Métricas | Separadas por líneas — sin cards encerradas |
-| Tabla | Sin fondo — datos flotando sobre página limpia |
-| Barras | 3px de alto — minimalistas |
+| Sidebar | Hover expand 56px → 220px · fondo `#0a0a0a` · ítem activo con borde verde |
+| Header | Métricas reales inline · avatar con iniciales · altura 80px |
+| Cards | `rounded-xl` · borde `border-gray-100` · hover con `translateY` · barra verde animada |
+| Tabla | Sin bordes verticales · hover `bg-gray-50` · badge de estado |
+| Fondo | `#F7F9FB` — gris muy claro para diferenciar niveles |
 | Acento | Verde `#2a5a2a` → `#7fd4a0` |
-| Tipografía | Inter via shadcn Luma |
+| Tipografía | Manrope (headlines) · Inter (body y datos) via shadcn Luma |
 | Iconos | Lucide via shadcn Luma |
 
 ---
 
 ## Vistas
 
-| Vista | Ruta | Descripción |
-|---|---|---|
-| Login | `/login` | Autenticación con email y password |
-| Dashboard | `/dashboard` | Métricas, empleados recientes, barras por departamento |
-| Empleados | `/empleados` | Tabla completa con filtros, búsqueda, editar y eliminar |
-| Departamentos | `/departamentos` | Lista con conteo de empleados por área |
-| Nómina | `/nomina` | Resumen de salarios con gráfica |
-| Roles & Acceso | `/roles` | Gestión de permisos por usuario |
+| Vista | Ruta | Estado | Descripción |
+|---|---|---|---|
+| Login | `/login` | ✅ | Autenticación con email y password, redirección automática |
+| Dashboard | `/dashboard` | ✅ | Métricas, empleados recientes, gráfica por departamento |
+| Empleados | `/empleados` | ✅ | CRUD completo, búsqueda, paginación, modal crear/editar |
+| Departamentos | `/departamentos` | 🔲 | Lista con conteo de empleados por área |
+| Nómina | `/nomina` | 🔲 | Resumen de salarios con gráfica |
+| Roles & Acceso | `/roles` | 🔲 | Gestión de permisos por usuario |
 
 ---
 
@@ -156,10 +160,14 @@ staffcore/
         ├── components/
         │   ├── ui/                  # componentes shadcn
         │   └── layout/              # Sidebar, Header, Layout
-        ├── pages/                   # Dashboard, Empleados, Departamentos...
-        ├── hooks/
-        ├── context/
-        ├── App.tsx
+        ├── pages/
+        │   ├── Login.tsx            # ✅
+        │   ├── Dashboard.tsx        # ✅
+        │   ├── Empleados.tsx        # ✅
+        │   ├── Departamentos.tsx    # 🔲
+        │   ├── Nomina.tsx           # 🔲
+        │   └── Roles.tsx            # 🔲
+        ├── App.tsx                  # rutas + ProtectedRoute
         └── main.tsx
 ```
 
@@ -210,6 +218,8 @@ POST /auth/login  →  { access_token, token_type }
                           ↓
               Control de acceso por current_user.role
 ```
+
+El token se guarda en `localStorage` y el interceptor de Axios lo agrega automáticamente a cada petición. `ProtectedRoute` en el frontend redirige al login si no hay token.
 
 ---
 
