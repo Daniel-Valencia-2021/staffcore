@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   LogOut,
   Users,
+  ShieldCheck,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -17,7 +18,6 @@ export default function Sidebar() {
 
   return (
     <aside className="group w-14 hover:w-[220px] transition-all duration-300 ease-in-out h-full bg-[#0a0a0a] flex flex-col py-6 overflow-hidden z-50 shadow-2xl">
-
       {/* Logo */}
       <div className="px-4 mb-10 flex items-center gap-4">
         <div className="min-w-[24px] h-6 w-6 bg-[#2a5a2a] flex items-center justify-center rounded-sm shrink-0">
@@ -93,6 +93,22 @@ export default function Sidebar() {
             Nómina
           </span>
         </NavLink>
+
+        <NavLink
+          to="/roles"
+          className={({ isActive }) =>
+            `flex items-center gap-4 h-11 px-2 rounded-lg transition-colors ${
+              isActive
+                ? "bg-[#2a5a2a]/20 border-l-4 border-[#2a5a2a] text-white"
+                : "text-gray-500 hover:bg-white/5 hover:text-white"
+            }`
+          }
+        >
+          <ShieldCheck  size={20} className="shrink-0" />
+          <span className="hidden group-hover:block whitespace-nowrap text-sm font-medium">
+            Roles
+          </span>
+        </NavLink>
       </nav>
 
       {/* Logout */}
@@ -107,7 +123,6 @@ export default function Sidebar() {
           </span>
         </button>
       </div>
-
     </aside>
   );
 }

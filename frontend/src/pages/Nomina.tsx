@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 import api from "@/api/axios";
 import { useEffect, useState } from "react";
 import {
@@ -8,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+import { ShieldAlert } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -33,6 +35,8 @@ interface Empleado {
 }
 
 export default function Nomina() {
+  const token = localStorage.getItem("token");
+  const currentUser = token ? jwtDecode<{ role: string }>(token) : null;
   const [loading, setLoading] = useState(false);
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
@@ -70,6 +74,20 @@ export default function Nomina() {
       .filter((e) => e.departament_id === dept.id)
       .reduce((sum, e) => sum + e.salary, 0),
   }));
+
+  if (currentUser?.role !== "Admin" && currentUser?.role !== "Manager") {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+          <ShieldAlert size={24} className="text-red-400" />
+        </div>
+        <p className="text-gray-900 font-semibold">Acceso restringido</p>
+        <p className="text-gray-400 text-sm">
+          Solo los administradores pueden acceder a esta vista.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

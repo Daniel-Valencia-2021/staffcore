@@ -6,6 +6,8 @@ import Empleados from "./pages/Empleados";
 import Departamentos from "./pages/Departamentos";
 import Nomina from "./pages/Nomina";
 import Login from "./pages/Login";
+import Roles from './pages/Roles'
+
 
 function ProtectedRoute() {
   const token = localStorage.getItem("token");
@@ -27,6 +29,7 @@ function App() {
           <Route path="/empleados" element={<Empleados />} />
           <Route path="/departamentos" element={<Departamentos />} />
           <Route path="/nomina" element={<Nomina />} />
+          <Route path="/roles" element={<Roles/>}/>
         </Route>
       </Route>
     </Routes>

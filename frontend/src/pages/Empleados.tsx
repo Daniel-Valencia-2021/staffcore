@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 import api from "@/api/axios";
 import {
   Dialog,
@@ -13,6 +15,7 @@ import {
   ChevronRight,
   Pencil,
   Trash2,
+  ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,6 +58,8 @@ const labelClass =
   "text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1 block";
 
 export default function Empleados() {
+  const token = localStorage.getItem("token");
+  const currentUser = token ? jwtDecode<{ role: string }>(token) : null;
   const [paginaActual, setPaginaActual] = useState(1);
   const empleadosPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
@@ -204,6 +209,20 @@ export default function Empleados() {
     }
     setModalAbierto(true);
   };
+
+  if (currentUser?.role !== "Admin" && currentUser?.role !== "Manager") {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+          <ShieldAlert size={24} className="text-red-400" />
+        </div>
+        <p className="text-gray-900 font-semibold">Acceso restringido</p>
+        <p className="text-gray-400 text-sm">
+          Solo los administradores pueden acceder a esta vista.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
