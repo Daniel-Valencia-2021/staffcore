@@ -8,12 +8,13 @@
 
 ---
 
-![Estado](https://img.shields.io/badge/Backend-Completo-2a5a2a?style=flat-square)
-![Estado](https://img.shields.io/badge/Frontend-En%20progreso-f59e0b?style=flat-square)
+![Backend](https://img.shields.io/badge/Backend-Completo-2a5a2a?style=flat-square)
+![Frontend](https://img.shields.io/badge/Frontend-Completo-2a5a2a?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.11+-3776ab?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white)
+![AI](https://img.shields.io/badge/AI%20Assisted-Claude%20Sonnet-6366f1?style=flat-square)
 
 </div>
 
@@ -21,15 +22,17 @@
 
 ## Vista previa
 
-> 📸 **Capturas próximamente** — Se agregarán cuando todas las vistas estén completas.
-> Para agregarlas: crea una carpeta `screenshots/` en la raíz del repo y reemplaza esta sección con:
-> `![Dashboard](./screenshots/dashboard.png)`
+| Login | Dashboard |
+|---|---|
+| ![Login](./screenshots/login.png) | ![Dashboard](./screenshots/dashboard.png) |
 
-```
-[ Login ]   [ Dashboard ]   [ Empleados ]   [ Departamentos ]   [ Nómina ]
-   ✅            ✅              ✅                 🔲               🔲
- Listo         Listo           Listo          Próximamente     Próximamente
-```
+| Empleados | Departamentos |
+|---|---|
+| ![Empleados](./screenshots/empleados.png) | ![Departamentos](./screenshots/departamentos.png) |
+
+| Nómina | Roles & Acceso |
+|---|---|
+| ![Nomina](./screenshots/nomina.png) | ![Roles](./screenshots/roles.png) |
 
 ---
 
@@ -38,9 +41,25 @@
 StaffCore es una plataforma interna de gestión de empleados con un diseño **enterprise moderno** basado en el sistema de diseño Stitch de Google — tipografía Manrope + Inter, paleta de slate profundo con acento verde, cards con tonal layering y tablas sin bordes verticales.
 
 - Empleados gestionados desde un solo lugar
-- Departamentos con métricas en tiempo real
-- Acceso por roles — admin y usuario estándar
+- Departamentos con métricas y nómina por área
+- Nómina con resumen de salarios y distribución visual
+- Control de acceso por roles — Admin, Manager y Viewer
 - API REST completamente documentada con Swagger
+
+---
+
+## Proceso de desarrollo
+
+El backend fue desarrollado íntegramente por **Daniel Alexis Valencia Nieves**. Para el frontend, dado que no es su área principal, se utilizó **Claude Sonnet (Anthropic)** como agente de IA asistente — siguiendo un flujo de trabajo estructurado donde Daniel construía la lógica y Claude asistía con la arquitectura de componentes, el sistema de diseño y la adaptación al stack elegido.
+
+### Metodología de trabajo con IA
+
+- Daniel implementaba la lógica de cada vista (estados, llamadas a la API, CRUD)
+- Claude revisaba, retroalimentaba y aplicaba el sistema de diseño Stitch
+- Las decisiones de arquitectura, rutas y modelo de datos fueron siempre de Daniel
+- El frontend no fue generado automáticamente — fue construido iterativamente con guía y revisión
+
+> Esta forma de trabajar refleja una habilidad profesional real: saber dirigir herramientas de IA para complementar áreas fuera del stack principal, manteniendo control sobre el proyecto.
 
 ---
 
@@ -68,6 +87,7 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **en
 | **Axios** | Cliente HTTP con interceptor JWT |
 | **Recharts** | Gráficas del dashboard y nómina |
 | **jwt-decode** | Decodificación del token en el cliente |
+| **Claude Sonnet** | Agente de IA — diseño, revisión y arquitectura frontend |
 
 ---
 
@@ -81,9 +101,9 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **en
 - [x] Seeder con datos de prueba
 - [x] Tests con pytest
 - [x] JWT Authentication — login, tokens, rutas protegidas
-- [x] Control de acceso por rol (`admin` / `user`)
+- [x] Control de acceso por rol (`Admin` / `Manager` / `Viewer`)
 
-### 🚧 Frontend — En progreso
+### ✅ Frontend — Completo
 
 **Setup**
 - [x] Proyecto Vite + TypeScript (`react-ts`)
@@ -97,11 +117,11 @@ StaffCore es una plataforma interna de gestión de empleados con un diseño **en
 **Vistas**
 - [x] Layout — Sidebar con hover expand + Header con métricas reales
 - [x] Login — pantalla dividida, autenticación JWT, redirección automática
-- [x] Dashboard — métricas, tabla de empleados recientes, gráfica de barras por departamento
+- [x] Dashboard — métricas, tabla de empleados recientes, gráfica por departamento
 - [x] Empleados — CRUD completo, búsqueda en tiempo real, paginación, modal crear/editar
-- [ ] Departamentos
-- [ ] Nómina
-- [ ] Roles & Acceso
+- [x] Departamentos — CRUD completo, conteo de empleados y nómina por departamento
+- [x] Nómina — métricas, tabla ordenada por salario con % del total, gráfica por departamento
+- [x] Roles & Acceso — gestión de usuarios, control de acceso por rol, solo visible para Admin
 
 ---
 
@@ -124,14 +144,14 @@ El sistema de diseño está basado en **Stitch de Google** — enterprise modern
 
 ## Vistas
 
-| Vista | Ruta | Estado | Descripción |
+| Vista | Ruta | Roles | Descripción |
 |---|---|---|---|
-| Login | `/login` | ✅ | Autenticación con email y password, redirección automática |
-| Dashboard | `/dashboard` | ✅ | Métricas, empleados recientes, gráfica por departamento |
-| Empleados | `/empleados` | ✅ | CRUD completo, búsqueda, paginación, modal crear/editar |
-| Departamentos | `/departamentos` | 🔲 | Lista con conteo de empleados por área |
-| Nómina | `/nomina` | 🔲 | Resumen de salarios con gráfica |
-| Roles & Acceso | `/roles` | 🔲 | Gestión de permisos por usuario |
+| Login | `/login` | Todos | Autenticación con email y password |
+| Dashboard | `/dashboard` | Admin, Manager | Métricas, empleados recientes, gráfica por departamento |
+| Empleados | `/empleados` | Admin, Manager | CRUD completo, búsqueda, paginación, modal crear/editar |
+| Departamentos | `/departamentos` | Admin, Manager | CRUD, conteo de empleados y nómina por área |
+| Nómina | `/nomina` | Admin, Manager | Resumen de salarios con gráfica y porcentajes |
+| Roles & Acceso | `/roles` | Solo Admin | Gestión de usuarios y roles del sistema |
 
 ---
 
@@ -164,9 +184,9 @@ staffcore/
         │   ├── Login.tsx            # ✅
         │   ├── Dashboard.tsx        # ✅
         │   ├── Empleados.tsx        # ✅
-        │   ├── Departamentos.tsx    # 🔲
-        │   ├── Nomina.tsx           # 🔲
-        │   └── Roles.tsx            # 🔲
+        │   ├── Departamentos.tsx    # ✅
+        │   ├── Nomina.tsx           # ✅
+        │   └── Roles.tsx            # ✅
         ├── App.tsx                  # rutas + ProtectedRoute
         └── main.tsx
 ```
@@ -207,7 +227,7 @@ npm run dev
 
 ---
 
-## Autenticación
+## Autenticación y roles
 
 ```
 POST /auth/login  →  { access_token, token_type }
@@ -219,7 +239,11 @@ POST /auth/login  →  { access_token, token_type }
               Control de acceso por current_user.role
 ```
 
-El token se guarda en `localStorage` y el interceptor de Axios lo agrega automáticamente a cada petición. `ProtectedRoute` en el frontend redirige al login si no hay token.
+| Rol | Permisos |
+|---|---|
+| **Admin** | Acceso total — incluyendo Roles & Acceso |
+| **Manager** | Acceso a Dashboard, Empleados, Departamentos y Nómina |
+| **Viewer** | Solo lectura — sin acceso a vistas de gestión |
 
 ---
 
@@ -241,5 +265,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 <div align="center">
 
 **StaffCore** · Daniel Alexis Valencia Nieves · Medellín · 2026
+
+*Backend desarrollado por Daniel · Frontend construido con asistencia de Claude Sonnet (Anthropic)*
 
 </div>
