@@ -38,28 +38,23 @@
 
 ## ¿Qué es StaffCore?
 
-StaffCore es una plataforma interna de gestión de empleados con un diseño **enterprise moderno** basado en el sistema de diseño Stitch de Google — tipografía Manrope + Inter, paleta de slate profundo con acento verde, cards con tonal layering y tablas sin bordes verticales.
+StaffCore es una plataforma de gestión de empleados que construí para poner en práctica mi stack principal — FastAPI, PostgreSQL y React. El diseño está basado en el sistema Stitch de Google: tipografía Manrope + Inter, paleta de slate profundo con acento verde, cards con tonal layering y tablas sin bordes verticales.
 
-- Empleados gestionados desde un solo lugar
-- Departamentos con métricas y nómina por área
-- Nómina con resumen de salarios y distribución visual
-- Control de acceso por roles — Admin, Manager y Viewer
-- API REST completamente documentada con Swagger
+- CRUD completo de empleados y departamentos
+- Nómina con métricas, distribución por área y gráficas
+- Autenticación JWT con control de acceso por roles
+- API REST documentada con Swagger
+- Desplegado en Render + Vercel con Neon como base de datos
 
 ---
 
 ## Proceso de desarrollo
 
-El backend fue desarrollado íntegramente por **Daniel Alexis Valencia Nieves**. Para el frontend, dado que no es su área principal, se utilizó **Claude Sonnet (Anthropic)** como agente de IA asistente — siguiendo un flujo de trabajo estructurado donde Daniel construía la lógica y Claude asistía con la arquitectura de componentes, el sistema de diseño y la adaptación al stack elegido.
+El backend lo desarrollé completamente — modelos, schemas, endpoints, autenticación JWT y tests. Para el frontend, que no es mi área principal, usé **Claude Sonnet (Anthropic)** como agente de IA asistente.
 
-### Metodología de trabajo con IA
+El flujo de trabajo fue estructurado: yo implementaba la lógica de cada vista — estados, llamadas a la API, CRUD — y Claude revisaba, retroalimentaba y aplicaba el sistema de diseño. Las decisiones de arquitectura, rutas y modelo de datos fueron siempre mías.
 
-- Daniel implementaba la lógica de cada vista (estados, llamadas a la API, CRUD)
-- Claude revisaba, retroalimentaba y aplicaba el sistema de diseño Stitch
-- Las decisiones de arquitectura, rutas y modelo de datos fueron siempre de Daniel
-- El frontend no fue generado automáticamente — fue construido iterativamente con guía y revisión
-
-> Esta forma de trabajar refleja una habilidad profesional real: saber dirigir herramientas de IA para complementar áreas fuera del stack principal, manteniendo control sobre el proyecto.
+> Creo que saber usar herramientas de IA para complementar áreas fuera de tu stack principal es una habilidad profesional real, no un atajo. El proyecto es mío — la IA fue una herramienta, no el autor.
 
 ---
 
@@ -111,7 +106,7 @@ El backend fue desarrollado íntegramente por **Daniel Alexis Valencia Nieves**.
 - [x] Colores StaffCore en `@theme` — `#2a5a2a` / `#7fd4a0`
 - [x] Path aliases configurados (`@/*` → `src/*`)
 - [x] shadcn/ui inicializado — Radix + Luma
-- [x] Axios con interceptor JWT
+- [x] Axios con interceptor JWT y variable de entorno por ambiente
 - [x] React Router con rutas protegidas (`ProtectedRoute`)
 
 **Vistas**
@@ -127,7 +122,7 @@ El backend fue desarrollado íntegramente por **Daniel Alexis Valencia Nieves**.
 
 ## Diseño
 
-El sistema de diseño está basado en **Stitch de Google** — enterprise moderno con tonal layering.
+Sistema de diseño basado en **Stitch de Google** — enterprise moderno con tonal layering.
 
 | Elemento | Decisión de diseño |
 |---|---|
@@ -193,7 +188,7 @@ staffcore/
 
 ---
 
-## Instalación
+## Instalación local
 
 ### Backend
 
@@ -224,6 +219,18 @@ npm run dev
 ```
 
 > App: `http://localhost:5173`
+
+---
+
+## Deploy
+
+| Servicio | Plataforma | URL |
+|---|---|---|
+| Frontend | Vercel | https://staffcore-weld.vercel.app |
+| Backend | Render | https://staffcore-backend.onrender.com |
+| Base de datos | Neon (PostgreSQL) | — |
+
+El frontend usa `VITE_API_URL` para apuntar al backend según el ambiente — `localhost:8000` en local, la URL de Render en producción.
 
 ---
 
@@ -265,7 +272,5 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 <div align="center">
 
 **StaffCore** · Daniel Alexis Valencia Nieves · Medellín · 2026
-
-*Backend desarrollado por Daniel · Frontend construido con asistencia de Claude Sonnet (Anthropic)*
 
 </div>
